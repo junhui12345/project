@@ -1,1 +1,4 @@
 rootProject.name = 'project'
+include 'project-api'
+include 'project-batch'
+include 'project-core'

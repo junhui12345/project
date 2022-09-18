@@ -1,16 +1,4 @@
 spring:
-  profiles:
-    active: local
-  batch:
-    job:
-      names: ${job.name:NONE}
-
----
-
-spring:
-  config:
-    activate:
-      on-profile: local
   datasource:
     url: jdbc:h2:file:./data/project
     username: sa
@@ -27,6 +15,5 @@ spring:
     generate-ddl: false
     hibernate:
       ddl-auto: none
-  batch:
-    jdbc:
-      initialize-schema: ALWAYS
+server:
+  port: 8080
