@@ -1,9 +1,10 @@
 spring:
   datasource:
-    url: jdbc:h2:file:./data/project
-    username: sa
-    password:
-    driverClassName: org.h2.Driver
+    hikari:
+      driver-class-name: org.h2.Driver
+      jdbc-url: jdbc:h2:tcp://localhost:9092/./data/project
+      username: sa
+      password:
   h2:
     console:
       enabled: true
@@ -14,6 +15,6 @@ spring:
     show-sql: true
     generate-ddl: false
     hibernate:
-      ddl-auto: none
+      ddl-auto: update
 server:
   port: 8080
