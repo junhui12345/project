@@ -31,7 +31,8 @@ public class JobScheduler {
 
     private static final String FILE_PATH = "filePath";
 
-    @Scheduled(cron="0/10 * * * * *")
+    //@Scheduled(cron="0/10 * * * * *") -- for test
+    @Scheduled(cron="0 0 0 * * *") //매일 자정
     public void runJob() {
         final List<String> args=applicationArguments.getOptionValues(FILE_PATH);
         final Map<String, JobParameter> confMap = new HashMap<>();
