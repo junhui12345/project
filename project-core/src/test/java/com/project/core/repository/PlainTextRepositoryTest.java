@@ -23,7 +23,7 @@ public class PlainTextRepositoryTest {
         plainText.setTotalMemberCount(100L);
         plainText.setExitMemberCount(200L);
         plainText.setAmountOfPayment(new BigInteger("1000000"));
-        plainText.setSalesAmount(new BigInteger("2000000"));
+        plainText.setAmountSales(new BigInteger("2000000"));
         plainText.setAmountUsed(new BigInteger("3000000"));
 
         //when
@@ -35,7 +35,7 @@ public class PlainTextRepositoryTest {
         Assert.assertEquals(plainText.getTotalMemberCount(), saved.getTotalMemberCount());
         Assert.assertEquals(plainText.getExitMemberCount(), saved.getExitMemberCount());
         Assert.assertEquals(plainText.getAmountOfPayment(), saved.getAmountOfPayment());
-        Assert.assertEquals(plainText.getSalesAmount(), saved.getSalesAmount());
+        Assert.assertEquals(plainText.getAmountSales(), saved.getAmountSales());
         Assert.assertEquals(plainText.getAmountUsed(), saved.getAmountUsed());
     }
 }
