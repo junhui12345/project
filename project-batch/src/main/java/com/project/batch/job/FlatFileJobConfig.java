@@ -17,9 +17,11 @@ import org.springframework.batch.item.file.FlatFileItemReader;
 import org.springframework.batch.item.file.builder.FlatFileItemReaderBuilder;
 import org.springframework.batch.item.file.transform.DelimitedLineTokenizer;
 import org.springframework.batch.item.validator.ValidatingItemProcessor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.FileSystemResource;
 
 import java.util.Map;
@@ -30,49 +32,42 @@ import java.util.Map;
 public class FlatFileJobConfig {
     private final JobBuilderFactory jobBuilderFactory;
     private final StepBuilderFactory stepBuilderFactory;
-    //private final PlainTextRepository plainTextRepository;
-
-    @Value("#{jobParameters}")
-    private Map<String, JobParameter> jobParameters;
+    private final PlainTextRepository plainTextRepository;
 
     @Bean
     public Job flatFileJob() {
         return jobBuilderFactory.get("flatFileJob")
                 .incrementer(new RunIdIncrementer())
                 .validator(new FilePathParameterValidator())
-                .start(flatFileStep())
+                .start(flatFileStep(null))
                 .build();
     }
 
     @JobScope
     @Bean
-    public Step flatFileStep() {
+    public Step flatFileStep(@Value("#{jobParameters[filePath]}") String filePath) {
         return stepBuilderFactory.get("flatFileStep")
-                .<PlainText, PlainText>chunk(1)
-                .reader(paymentTextReader())
+                .<PlainText, PlainText>chunk(5)
+                .reader(paymentTextReader(filePath))
                 .processor(validatingItemProcessor())
                 .writer(paymentWriter())
                 .faultTolerant()
-                .retryLimit(2)
                 .build();
     }
 
     @StepScope
     @Bean
-    public FlatFileItemReader<PlainText> paymentTextReader() {
-
-         JobParameter parma = jobParameters.get("filePath");
-
-
+    public FlatFileItemReader<PlainText> paymentTextReader(@Value("#{jobParameters[filePath]}") String filePath) {
         return new FlatFileItemReaderBuilder<PlainText>()
                 .name("paymentTextReader")
-                .lineTokenizer(new DelimitedLineTokenizer("|"))
+                .delimited()
+                .delimiter("|")
+                .names("inputDateTime", "totalMemberCount", "exitMemberCount", "amountOfPayment", "amountUsed", "salesAmount")
                 .fieldSetMapper(new PlainTextMapper())
-                //@TODO 파일 경로 지정
-                .resource(new FileSystemResource( jobParameters.get("filePath").toString()))
+                .resource(new ClassPathResource(filePath))
                 .build();
     }
-
+    @StepScope
     @Bean
     public ValidatingItemProcessor<PlainText> validatingItemProcessor() {
         ValidatingItemProcessor<PlainText> itemProcessor = new ValidatingItemProcessor<>(new PaymentValidator());
@@ -83,8 +78,6 @@ public class FlatFileJobConfig {
     @StepScope
     @Bean
     public ItemWriter<PlainText> paymentWriter() {
-        return items ->
-                items.forEach(item -> System.out.println(item));
-//                items.forEach(item -> plainTextRepository.save(item));
+        return items -> items.forEach(item -> plainTextRepository.save(item));
     }
 }

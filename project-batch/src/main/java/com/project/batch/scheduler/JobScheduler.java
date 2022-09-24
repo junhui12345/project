@@ -39,9 +39,7 @@ public class JobScheduler {
         final JobParameters jobParameters = new JobParameters(confMap);
 
         try {
-
             jobLauncher.run(jobConfiguration.flatFileJob(), jobParameters);
-
         } catch (JobExecutionAlreadyRunningException | JobInstanceAlreadyCompleteException
                  | JobParametersInvalidException | org.springframework.batch.core.repository.JobRestartException e) {
             log.error(e.getMessage());

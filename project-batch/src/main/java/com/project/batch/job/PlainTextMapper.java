@@ -10,12 +10,12 @@ public class PlainTextMapper implements FieldSetMapper<PlainText> {
     @Override
     public PlainText mapFieldSet(final FieldSet fieldSet) {
         final PlainText payment = new PlainText();
-        payment.setInputDateTime(fieldSet.readString(1));
-        payment.setTotalMemberCount(fieldSet.readLong(2));
-        payment.setExitMemberCount(fieldSet.readLong(3));
-        payment.setAmountOfPayment(new BigInteger(fieldSet.readString(4)));
-        payment.setAmountUsed(new BigInteger(fieldSet.readString(5)));
-        payment.setSalesAmount(new BigInteger(fieldSet.readString(6)));
+        payment.setInputDateTime(fieldSet.readString(0));
+        payment.setTotalMemberCount(fieldSet.readLong(1));
+        payment.setExitMemberCount(fieldSet.readLong(2));
+        payment.setAmountOfPayment(new BigInteger(String.valueOf(fieldSet.readLong(3))));
+        payment.setAmountUsed(new BigInteger(String.valueOf(fieldSet.readLong(4))));
+        payment.setSalesAmount(new BigInteger(String.valueOf(fieldSet.readLong(5))));
         return payment;
     }
 }
