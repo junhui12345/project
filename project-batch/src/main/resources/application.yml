@@ -34,3 +34,10 @@ spring:
 server:
   port: 8081
 
+---
+spring:
+  config:
+    activate:
+      on-profile: test
+  jpa:
+    database: h2
