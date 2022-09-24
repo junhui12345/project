@@ -30,6 +30,6 @@ public class PlainText {
 
     private BigInteger amountOfPayment; //결제금액
     private BigInteger amountUsed; //사용금액
-    private BigInteger salesAmount; //매출금액
+    private BigInteger amountSales; //매출금액
 }
 

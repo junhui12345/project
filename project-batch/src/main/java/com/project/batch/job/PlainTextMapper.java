@@ -15,7 +15,7 @@ public class PlainTextMapper implements FieldSetMapper<PlainText> {
         payment.setExitMemberCount(fieldSet.readLong(2));
         payment.setAmountOfPayment(new BigInteger(String.valueOf(fieldSet.readLong(3))));
         payment.setAmountUsed(new BigInteger(String.valueOf(fieldSet.readLong(4))));
-        payment.setSalesAmount(new BigInteger(String.valueOf(fieldSet.readLong(5))));
+        payment.setAmountSales(new BigInteger(String.valueOf(fieldSet.readLong(5))));
         return payment;
     }
 }

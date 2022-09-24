@@ -62,7 +62,7 @@ public class FlatFileJobConfig {
                 .name("paymentTextReader")
                 .delimited()
                 .delimiter("|")
-                .names("inputDateTime", "totalMemberCount", "exitMemberCount", "amountOfPayment", "amountUsed", "salesAmount")
+                .names("inputDateTime", "totalMemberCount", "exitMemberCount", "amountOfPayment", "amountUsed", "amountSales")
                 .fieldSetMapper(new PlainTextMapper())
                 .resource(new ClassPathResource(filePath))
                 .build();
