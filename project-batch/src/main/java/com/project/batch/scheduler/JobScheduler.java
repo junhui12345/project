@@ -1,6 +1,6 @@
-package com.project.batch.Scheduler;
+package com.project.batch.scheduler;
 
-import com.project.batch.Job.JobConfiguration;
+import com.project.batch.job.FlatFileJobConfig;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.JobParameter;
 import org.springframework.batch.core.JobParameters;
@@ -9,10 +9,12 @@ import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.batch.core.repository.JobExecutionAlreadyRunningException;
 import org.springframework.batch.core.repository.JobInstanceAlreadyCompleteException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.ApplicationArguments;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Slf4j
@@ -22,24 +24,25 @@ public class JobScheduler {
     private JobLauncher jobLauncher;
 
     @Autowired
-    private JobConfiguration jobConfiguration;
+    private FlatFileJobConfig jobConfiguration;
+
+    @Autowired
+    private ApplicationArguments applicationArguments;
+
+    private static final String FILE_PATH = "filePath";
 
     @Scheduled(cron="0/10 * * * * *")
     public void runJob() {
-
-        Map<String, JobParameter> confMap = new HashMap<>();
-        confMap.put("time", new JobParameter(System.currentTimeMillis()));
-        JobParameters jobParameters = new JobParameters(confMap);
+        final List<String> args=applicationArguments.getOptionValues(FILE_PATH);
+        final Map<String, JobParameter> confMap = new HashMap<>();
+        confMap.put(FILE_PATH, new JobParameter(args.get(0)));
+        final JobParameters jobParameters = new JobParameters(confMap);
 
         try {
-
-            jobLauncher.run(jobConfiguration.jobTest(), jobParameters);
-
+            jobLauncher.run(jobConfiguration.flatFileJob(), jobParameters);
         } catch (JobExecutionAlreadyRunningException | JobInstanceAlreadyCompleteException
                  | JobParametersInvalidException | org.springframework.batch.core.repository.JobRestartException e) {
-
             log.error(e.getMessage());
         }
     }
-
 }

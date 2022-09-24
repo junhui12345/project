@@ -69,7 +69,7 @@ project(':project-api') {
 	jar { enabled = false }
 
 	dependencies {
-		compileOnly project(':project-core')
+		implementation project(':project-core')
 		implementation 'org.springframework.boot:spring-boot-starter-web'
 	}
 }
@@ -79,7 +79,7 @@ project(':project-batch') {
 	jar { enabled = false }
 
 	dependencies {
-		compileOnly project(':project-core')
+		implementation project(':project-core')
 		implementation 'org.springframework.boot:spring-boot-starter-web'
 		implementation 'org.springframework.boot:spring-boot-starter-batch'
 		implementation 'org.springframework.boot:spring-boot-starter-quartz'
